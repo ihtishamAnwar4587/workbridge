@@ -18,8 +18,3 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
-
-
-Route::get('/hell', static function () {
-    dd('hello there');
-});
