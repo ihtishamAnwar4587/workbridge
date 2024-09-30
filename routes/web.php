@@ -18,8 +18,4 @@ Route::middleware('auth')->group(function () {
 });
 
 
-Route::get('/another-route', static function() {
-    return "another route has been added successfully!!";
-});
-
 require __DIR__.'/auth.php';
