@@ -1,30 +1,25 @@
+name: Deploy
+
+# Trigger the workflow on push and
+# pull request events on the master branch
 on:
   push:
-    branches:
-      - main
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# Authenticate to the the server via ssh
+# and run our deployment script
 jobs:
-  web-deploy:
+  deploy:
     runs-on: ubuntu-latest
-    name: build&deploy
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
+      - uses: actions/checkout@v3
+      - name: Deploy to Server
+        uses: appleboy/ssh-action@master
         with:
-          php-version: '8.2'
-
-      - name: Install Dependencies
-        run: composer install
-      - name: migrate
-        run: php artisan migrate --force
-
-      - name: deploy file to server
-        uses: wlixcc/SFTP-Deploy-Action@v1.2.4
-        with:
-          username: 'root'
-          server: '${{ secrets.SERVER_IP }}'
-          ssh_private_key: ${{ secrets.SSH_PRIVATE_KEY }}
-          remote_path: '/var/www/html/workbridge'
-          sftpArgs: '-o ConnectTimeout=5'
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.USERNAME }}
+          port: ${{ secrets.PORT }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: "cd /var/www/workbridge && ./.scripts/deploy.sh"
