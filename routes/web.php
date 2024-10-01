@@ -17,4 +17,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/hell', static function() {
+    dd('welcome to hell');
+});
+
 require __DIR__.'/auth.php';
